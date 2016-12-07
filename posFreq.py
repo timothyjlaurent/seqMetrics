@@ -13,7 +13,6 @@ def get_id_seq_tuple(f):
 
 def get_sequence_frequency_for_fasta(path, out_path):
     s_counts = []
-    
     with open(path) as f:
         seqs = get_id_seq_tuple(f)
         p_id, p_seq = seqs.next()
@@ -22,7 +21,8 @@ def get_sequence_frequency_for_fasta(path, out_path):
                 'primary': r
             })
         for id, seq in seqs:
-            for i, r in enumerate(seq.strip()):
+            for i, d in enumerate(s_counts):
+                r = seq.strip()[i]
                 if r != '-':
                     if s_counts[i].get('count') is None:
                         s_counts[i]['count'] = 0
@@ -33,7 +33,7 @@ def get_sequence_frequency_for_fasta(path, out_path):
                         s_counts[i]['variant_count'] += 1
     with open(out_path, 'wb') as out:
         writer = csv.writer(out)
-        writer.writerow([p_id])
+        writer.writerow([p_id.strip()])
         writer.writerow(['position', 'residue', 'freq'])
         for i, e in enumerate(s_counts):
             r = e['primary']
